@@ -30,4 +30,29 @@ const handleRegister = async (req, res) => {
   }
 };
 
-module.exports = { handleRegister };
+const handleLogout = (req, res) => {
+  try {
+    req.logOut(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.send("logout");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleProtect = (req, res) => {
+  try {
+    if (req.isAuthenticated()) {
+      res.send("protected");
+    } else {
+      res.status(401).send({ meg: "Unauthrozied" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { handleRegister, handleLogout, handleProtect };
