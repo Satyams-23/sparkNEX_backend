@@ -8,7 +8,9 @@ const hanldeOtp = async (req, res) => {
       res.send("otp successfull");
       console.log(phone);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = { hanldeOtp };

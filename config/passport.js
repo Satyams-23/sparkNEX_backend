@@ -1,6 +1,8 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { compareSync } = require("bcrypt");
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("../Model/userModel");
 
 passport.use(
@@ -18,6 +20,78 @@ passport.use(
       return done(err);
     }
   })
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:5000/auth/google/callback",
+      passReqToCallback: true,
+    },
+    function (request, accessToken, refreshToken, profile, done) {
+      User.findOne({ username: profile.email })
+        .exec()
+        .then((user) => {
+          if (!user) {
+            let newUser = new User({
+              username: profile.email,
+            });
+            newUser
+              .save()
+              .then((newUser) => done(null, newUser))
+              .catch((err) => {
+                console.log(err);
+                return done(err, null);
+              });
+          } else {
+            return done(null, user);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return done(err, null);
+        });
+    }
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: `${process.env.FACEBOOK_APP_ID}`,
+      clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
+      callbackURL: "http://localhost:5000/auth/facebook/callback",
+    },
+
+    function (accessToken, refreshToken, profile, done) {
+      console.log(accessToken, refreshToken);
+      console.log(profile, "fbprofile");
+      User.findOne({ username: profile.id })
+        .exec()
+        .then((user) => {
+          if (!user) {
+            let newUser = new User({
+              username: profile.id,
+            });
+            newUser
+              .save()
+              .then((newUser) => done(null, newUser))
+              .catch((err) => {
+                console.log(err);
+                return done(err, null);
+              });
+          } else {
+            return done(null, user);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return done(err, null);
+        });
+    }
+  )
 );
 
 passport.serializeUser(function (user, done) {

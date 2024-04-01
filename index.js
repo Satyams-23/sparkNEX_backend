@@ -48,7 +48,7 @@ mongoose
     console.log("not connected");
   });
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello Sparknex!");
 });
 
 app.listen(port, () => {
