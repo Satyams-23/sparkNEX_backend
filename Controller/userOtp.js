@@ -1,16 +1,15 @@
-const otp = require("../Model/otpSchema");
+const fetch = require("node-fetch");
 
-const hanldeOtp = async (req, res) => {
-  const { phone } = req.body;
+const username = process.env.SMS_USER;
+const password = process.env.SMS_PASSWORD;
 
-  try {
-    if (phone) {
-      res.send("otp successfull");
-      console.log(phone);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+const sendOtp = async (options) => {
+  const phone = options.phone.replace("+", "");
+  const message = await fetch(
+    `https://smsgw.tatatel.co.in:9095/campaignService/campaigns/qs?dr=true&sender=FRICOZ&recipient=${phone}&msg=Dear Customer, Your OTP for mobile number verification is ${options.otp}. Please do not share this OTP to anyone - Firstricoz Pvt. Ltd.&user=FIRSTR&pswd=First^01&PE_ID=1601832170235925649&Template_ID=1607100000000306120`
+  );
+  console.log("kdk", message, "12");
+  return message;
 };
 
-module.exports = { hanldeOtp };
+module.exports = sendOtp;

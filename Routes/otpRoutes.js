@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { hanldeOtp } = require("../Controller/userOtp");
+const { createOTPuser } = require("../Controller/createOTPuser");
 
-router.post("/otp", hanldeOtp);
+router.post("/otp", createOTPuser);
 
 module.exports = router;

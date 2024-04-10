@@ -71,6 +71,8 @@ passport.use(
       User.findOne({ username: profile.id })
         .exec()
         .then((user) => {
+          console.log("object");
+          console.log(user);
           if (!user) {
             let newUser = new User({
               username: profile.id,

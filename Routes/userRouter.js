@@ -3,6 +3,7 @@ const {
   handleRegister,
   handleLogout,
   handleProtect,
+  userUpadate,
 } = require("../Controller/userController.js");
 const passport = require("passport");
 require("../config/passport.js");
@@ -22,7 +23,6 @@ router.get(
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/protect",
     failureRedirect: "/login",
   }),
   function (req, res) {
@@ -38,7 +38,7 @@ router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
     failureRedirect: "/login",
-    successRedirect: "/protect",
+    successRedirect: "/",
   }),
   function (req, res) {
     res.send("fblobign");
@@ -46,6 +46,7 @@ router.get(
     console.log(req.user);
   }
 );
+router.put("/user/:username", userUpadate);
 router.get("/logout", handleLogout);
 
 router.get("/protect", handleProtect);

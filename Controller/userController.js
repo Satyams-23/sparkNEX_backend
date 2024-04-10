@@ -55,4 +55,29 @@ const handleProtect = (req, res) => {
   }
 };
 
-module.exports = { handleRegister, handleLogout, handleProtect };
+const userUpadate = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { fullName, birthDate, gender } = req.body;
+    if (gender !== "male" && gender !== "female" && gender !== "other") {
+      return res.status(400).send({ message: "Incorrect gender" });
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      { fullName, birthDate, gender },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = { handleRegister, handleLogout, handleProtect, userUpadate };
