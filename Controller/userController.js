@@ -80,4 +80,17 @@ const userUpadate = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { handleRegister, handleLogout, handleProtect, userUpadate };
+
+const handleGetUser = async (req, res) => {
+  const username = req.params.username;
+  const user = await User.findOne({ username: username }).select("-password");
+  res.status(200).send(user);
+};
+
+module.exports = {
+  handleRegister,
+  handleLogout,
+  handleProtect,
+  userUpadate,
+  handleGetUser,
+};
