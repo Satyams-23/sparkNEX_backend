@@ -83,7 +83,9 @@ const userUpadate = async (req, res) => {
 
 const handleGetUser = async (req, res) => {
   const username = req.params.username;
-  const user = await User.findOne({ username: username }).select("-password");
+  const user = await User.findOne({ username: username }).select(
+    "-password -_id"
+  );
   res.status(200).send(user);
 };
 
