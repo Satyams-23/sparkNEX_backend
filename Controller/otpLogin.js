@@ -1,11 +1,7 @@
 const sendOtp = require("./userOtp");
 const User = require("../Model/userModel");
 const generateOTP = require("./generateOTP");
-// const catchAsyncErrors = (fn) => {
-//   return (req, res, next) => {
-//     fn(req, res, next).catch(next);
-//   };
-// };
+
 const createOTPuser = async (req, res) => {
   try {
     const { phone } = req.body;
@@ -60,13 +56,4 @@ const OTPCheck = async (req, res) => {
   }
 };
 
-const OTPremove = async (req, res) => {
-  try {
-    if (otpfound) {
-      return res.status(401).json({ message: "otp delete" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 module.exports = { createOTPuser, OTPCheck };
