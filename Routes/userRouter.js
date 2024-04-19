@@ -5,6 +5,7 @@ const {
   handleProtect,
   userUpadate,
   handleGetUser,
+  handlePrivacy,
 } = require("../Controller/userController.js");
 const passport = require("passport");
 require("../config/passport.js");
@@ -51,5 +52,6 @@ router.put("/user/:username", userUpadate);
 router.get("/logout", handleLogout);
 router.get("/user/:username", handleGetUser);
 router.get("/protect", handleProtect);
+router.get("/privacy ", handlePrivacy);
 
 module.exports = router;

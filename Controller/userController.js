@@ -87,10 +87,15 @@ const handleGetUser = async (req, res) => {
   res.status(200).send(user);
 };
 
+const handlePrivacy = async (req, res) => {
+  res.send("this privacy");
+};
+
 module.exports = {
   handleRegister,
   handleLogout,
   handleProtect,
   userUpadate,
   handleGetUser,
+  handlePrivacy,
 };

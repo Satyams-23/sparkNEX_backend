@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 const userRouter = require("./Routes/userRouter");
 const otpRouter = require("./Routes/otpRoutes");
-
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
