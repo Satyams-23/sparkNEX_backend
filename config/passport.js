@@ -65,10 +65,10 @@ passport.use(
       callbackURL: "http://localhost:5000/auth/facebook/callback",
     },
 
-    function (accessToken, refreshToken, profile, done) {
+    async function (accessToken, refreshToken, profile, done) {
       console.log(accessToken, refreshToken);
       console.log(profile, "fbprofile");
-      User.findOne({ username: profile.id })
+      const user = await User.findOne({ username: profile.id })
         .exec()
         .then((user) => {
           console.log("object");
