@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
   birthDate: Date,
   gender: String,
   phone: String,
+  botName: String,
   otp: {
     type: Number,
     createdAt: {

@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 const userRouter = require("./Routes/userRouter");
 const otpRouter = require("./Routes/otpRoutes");
+const customizeRouter = require("./Routes/customizeRouter");
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
@@ -34,6 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(userRouter);
 app.use(otpRouter);
+app.use("/customize", customizeRouter);
 const DB = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.6oxpbun.mongodb.net/SparkNEX?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose
