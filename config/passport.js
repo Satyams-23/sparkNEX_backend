@@ -13,7 +13,9 @@ passport.use(
         return done(null, false, { message: "Incorrect Username" });
       }
       if (!compareSync(password, user.password)) {
-        return done(null, false, { message: "Incorrect Password" });
+        return done(null, false, {
+          message: "Incorrect Password",
+        });
       }
       return done(null, user);
     } catch (err) {
@@ -62,7 +64,8 @@ passport.use(
     {
       clientID: `${process.env.FACEBOOK_APP_ID}`,
       clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
-      callbackURL: "https://localhost:5000/auth/facebook/callback",
+      callbackURL:
+        "https://sparknex-backend.onrender.com/auth/facebook/callback",
     },
 
     async function (accessToken, refreshToken, profile, done) {

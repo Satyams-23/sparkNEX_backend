@@ -1,5 +1,6 @@
 const { hashSync } = require("bcrypt");
 const User = require("../Model/userModel");
+const generateToken = require("../config/generateToken");
 
 const handleRegister = async (req, res) => {
   const { username, password, confirPassword } = req.body;
@@ -22,7 +23,11 @@ const handleRegister = async (req, res) => {
 
       user.save();
       console.log(user);
-      res.send({ success: true, message: "user sucessfull create" });
+      res.status(201).json({
+        success: true,
+        message: "user sucessfull create",
+        token: generateToken(user._id),
+      });
     }
   } catch (error) {
     console.error(error);
@@ -86,6 +91,20 @@ const handleGetUser = async (req, res) => {
   const user = await User.findOne({ username: username }).select("-password ");
   res.status(200).send(user);
 };
+const handledeleteUser = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const deleteUser = await User.findOneAndDelete({ username: username });
+    console.log(deleteUser, "deleteuser");
+    if (!deleteUser) {
+      return res.status(404).send("User not found");
+    }
+    res.status(200).send({ message: "user delete" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 const handlePrivacy = async (req, res) => {
   res.send("this privacy");
@@ -97,5 +116,6 @@ module.exports = {
   handleProtect,
   userUpadate,
   handleGetUser,
+  handledeleteUser,
   handlePrivacy,
 };
