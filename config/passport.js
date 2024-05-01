@@ -38,11 +38,14 @@ passport.use(
         .then((user) => {
           if (!user) {
             let newUser = new User({
+              fullName: profile.displayName,
               username: profile.email,
             });
             newUser
               .save()
-              .then((newUser) => done(null, newUser))
+              .then((newUser) => {
+                done(null, newUser), console.log(newUser);
+              })
               .catch((err) => {
                 console.log(err);
                 return done(err, null);
