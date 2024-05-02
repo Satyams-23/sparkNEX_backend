@@ -24,9 +24,10 @@ const customizeSparkBot = async (req, res) => {
         username: username,
       });
       customizeBot.save();
-      console.log(customizeBot);
+
       res.status(200).json({
         message: "customize bot successfully created",
+        customizeBot: customizeBot,
       });
     }
     const updatedUser = await User.findOneAndUpdate(

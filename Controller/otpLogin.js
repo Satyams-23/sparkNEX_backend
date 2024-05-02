@@ -31,7 +31,7 @@ const createOTPuser = async (req, res) => {
         //       // Return a token or success message to the client
         res.status(200).json({
           success: true,
-          message: "kdid",
+          message: user,
         });
       }
     }

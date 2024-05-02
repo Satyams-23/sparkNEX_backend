@@ -4,7 +4,7 @@ const User = require("../Model/userModel");
 
 const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
-  console.log(userId);
+
   if (!userId) {
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
@@ -22,7 +22,7 @@ const accessChat = asyncHandler(async (req, res) => {
 
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
-    select: "name pic email",
+    select: "fullName username botName",
   });
 
   if (isChat.length > 0) {
@@ -58,7 +58,7 @@ const fetchChats = asyncHandler(async (req, res) => {
       .then(async (results) => {
         results = await User.populate(results, {
           path: "latestMessage.sender",
-          select: "name pic email",
+          select: "fullName username botName",
         });
         res.status(200).send(results);
       });

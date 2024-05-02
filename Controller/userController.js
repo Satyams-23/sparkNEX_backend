@@ -25,8 +25,9 @@ const handleRegister = async (req, res) => {
       console.log(user);
       res.status(201).json({
         success: true,
+        user: user,
         message: "user sucessfull create",
-        token: generateToken(user._id),
+        Token: generateToken(user._id),
       });
     }
   } catch (error) {
@@ -62,7 +63,7 @@ const handleProtect = (req, res) => {
 
 const userUpadate = async (req, res) => {
   try {
-    const { username } = req.params;
+    const { username } = req.user.username;
     const { fullName, birthDate, gender } = req.body;
     if (gender !== "male" && gender !== "female" && gender !== "other") {
       return res.status(400).send({ message: "Incorrect gender" });
@@ -87,7 +88,7 @@ const userUpadate = async (req, res) => {
 };
 
 const handleGetUser = async (req, res) => {
-  const username = req.params.username;
+  const username = req.user.username;
   const user = await User.findOne({ username: username }).select("-password ");
   res.status(200).send(user);
 };

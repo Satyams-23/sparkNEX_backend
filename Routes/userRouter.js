@@ -12,10 +12,11 @@ const {
 const passport = require("passport");
 require("../config/passport.js");
 const router = express.Router();
+const { protect } = require("../Middleware/authMiddleware");
 
-router.post("/registration", handleRegister);
+router.post("/auth/registration", handleRegister);
 
-router.post("/login", function (req, res, next) {
+router.post("/auth/login", function (req, res, next) {
   passport.authenticate("local", function (err, user, info) {
     if (err) {
       return next(err);
@@ -30,7 +31,11 @@ router.post("/login", function (req, res, next) {
       const token = generateToken(user._id);
       const userToSend = Object.assign({}, user._doc);
       delete userToSend.password;
-      return res.status(200).send({ userToSend, token });
+      return res.status(200).send({
+        user: userToSend,
+        Token: token,
+        message: "user sucessfull login",
+      });
     });
   })(req, res, next);
 });
@@ -46,29 +51,29 @@ router.get(
   }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.send("google login");
-    console.log(req.session);
-    console.log(req.user);
+    const token = generateToken(req.user._id);
+
+    res
+      .status(200)
+      .send({ user: req.user, Token: token, message: "user sucessfull login" });
   }
 );
 router.get("/auth/facebook", passport.authenticate("facebook"));
 
 router.get(
   "/auth/facebook/callback",
-  passport.authenticate("facebook", {
-    failureRedirect: "/login",
-    successRedirect: "/",
-  }),
+  passport.authenticate("facebook"),
   function (req, res) {
-    res.send("fblobign");
-    console.log(req.session);
-    console.log(req.user);
+    const token = generateToken(req.user._id);
+    const userToSend = Object.assign({}, req.user._doc);
+    delete userToSend.password;
+    res.status(200).send({ user: userToSend, Token: token });
   }
 );
-router.put("/user/:username", userUpadate);
+router.route("/userupdate").put(protect, userUpadate);
 router.get("/logout", handleLogout);
-router.get("/user/:username", handleGetUser);
-router.delete("/delete/:username", handledeleteUser);
+router.route("/user").get(protect, handleGetUser);
+router.route("/delete").delete(protect, handledeleteUser);
 router.get("/protect", handleProtect);
 router.get("/privacy ", handlePrivacy);
 
