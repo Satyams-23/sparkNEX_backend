@@ -1,6 +1,7 @@
 const { hashSync } = require("bcrypt");
 const User = require("../Model/userModel");
 const generateToken = require("../config/generateToken");
+const asyncHandler = require("express-async-handler");
 
 const handleRegister = async (req, res) => {
   const { username, password, confirPassword } = req.body;
@@ -61,6 +62,20 @@ const handleProtect = (req, res) => {
   }
 };
 
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { fullName: { $regex: req.query.search, $options: "i" } },
+          { username: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
+});
+
 const userUpadate = async (req, res) => {
   try {
     const { username } = req.user.username;
@@ -119,4 +134,5 @@ module.exports = {
   handleGetUser,
   handledeleteUser,
   handlePrivacy,
+  allUsers,
 };

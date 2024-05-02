@@ -69,6 +69,7 @@ passport.use(
       clientSecret: `${process.env.FACEBOOK_APP_SECRET}`,
       callbackURL:
         "https://sparknex-backend.onrender.com/auth/facebook/callback",
+      profileFields: ["id", "displayName", "email"],
     },
 
     async function (accessToken, refreshToken, profile, done) {
@@ -81,7 +82,8 @@ passport.use(
           console.log(user);
           if (!user) {
             let newUser = new User({
-              username: profile.id,
+              fullName: profile.displayName,
+              username: profile.emails[0].value,
             });
             newUser
               .save()

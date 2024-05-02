@@ -8,6 +8,7 @@ const {
   handleGetUser,
   handledeleteUser,
   handlePrivacy,
+  allUsers,
 } = require("../Controller/userController.js");
 const passport = require("passport");
 require("../config/passport.js");
@@ -70,6 +71,7 @@ router.get(
     res.status(200).send({ user: userToSend, Token: token });
   }
 );
+router.route("/user").get(protect, allUsers);
 router.route("/userupdate").put(protect, userUpadate);
 router.get("/logout", handleLogout);
 router.route("/user").get(protect, handleGetUser);
