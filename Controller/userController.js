@@ -76,7 +76,7 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-const userUpadate = async (req, res) => {
+const userUpadate = asyncHandler(async (req, res) => {
   try {
     const { username } = req.user.username;
     const { fullName, birthDate, gender } = req.body;
@@ -98,9 +98,10 @@ const userUpadate = async (req, res) => {
 
     res.json(updatedUser);
   } catch (error) {
-    console.log(error);
+    res.status(400);
+    throw new Error(error.message);
   }
-};
+});
 
 const handleGetUser = async (req, res) => {
   const username = req.user.username;

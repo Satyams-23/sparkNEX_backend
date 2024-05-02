@@ -8,6 +8,7 @@ const userRouter = require("./Routes/userRouter");
 const otpRouter = require("./Routes/otpRoutes");
 const customizeRouter = require("./Routes/customizeRouter");
 const chatRouter = require("./Routes/chatRouter");
+const messageRouter = require("./Routes/messageRouter");
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
@@ -38,14 +39,11 @@ app.use(userRouter);
 app.use(otpRouter);
 app.use("/api/chat", chatRouter);
 app.use("/customize", customizeRouter);
+app.use("/message", messageRouter);
 const DB = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.6oxpbun.mongodb.net/SparkNEX?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose
-  .connect(DB, {
-    useUnifiedTopology: true,
-
-    useNewUrlParser: true,
-  })
+  .connect(DB)
   .then(() => console.log("Connect"))
   .catch((error) => {
     console.log("not connected");
