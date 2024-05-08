@@ -9,6 +9,7 @@ const {
   handledeleteUser,
   handlePrivacy,
   allUsers,
+  handleChangeEmail,
 } = require("../Controller/userController.js");
 const passport = require("passport");
 require("../config/passport.js");
@@ -75,6 +76,7 @@ router.route("/user").get(protect, allUsers);
 router.route("/userupdate").put(protect, userUpadate);
 router.get("/logout", handleLogout);
 router.route("/user").get(protect, handleGetUser);
+router.route("/changeEmail").post(protect, handleChangeEmail);
 router.route("/delete").delete(protect, handledeleteUser);
 router.get("/protect", handleProtect);
 router.get("/privacy ", handlePrivacy);

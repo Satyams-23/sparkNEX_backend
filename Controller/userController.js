@@ -123,6 +123,30 @@ const handledeleteUser = async (req, res) => {
   }
 };
 
+const handleChangeEmail = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const newEmail = req.body.username;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { username: newEmail },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const email = user.username;
+    console.log("Updated user:", email);
+    res.status(200).json({ message: "Email updated successfully", email });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 const handlePrivacy = async (req, res) => {
   res.send("this privacy");
 };
@@ -136,4 +160,5 @@ module.exports = {
   handledeleteUser,
   handlePrivacy,
   allUsers,
+  handleChangeEmail,
 };

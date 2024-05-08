@@ -5,7 +5,7 @@ const generateOTP = require("../config/generateOTP");
 const createOTPuser = async (req, res) => {
   try {
     const { phone } = req.body;
-    if (phone == "+911111111111") {
+    if (phone === "+911111111111") {
       const otp = generateOTP(6);
       console.log("OTP------------------------> " + otp);
       const message = `Dear User, Your OTP for the FastX app login is: ${otp}`;
@@ -43,14 +43,14 @@ const createOTPuser = async (req, res) => {
 const OTPCheck = async (req, res) => {
   try {
     const { otp } = req.body;
-    const userfound = await User.findOne({ otp: otp }).select("-otp");
+    const userfound = await User.findOne({ otp: otp });
     if (!userfound) {
       return res.status(401).json({ message: "otp is worng" });
     }
 
-    const otpfound = await User.updateOne({ otp: otp }, { otp: "" });
+    // const otpfound = await User.updateOne({ otp: otp }, { otp: "" });
 
-    return res.status(200).json({ message: "otp ", otpfound, userfound });
+    return res.status(200).json({ message: "otp ", userfound });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }

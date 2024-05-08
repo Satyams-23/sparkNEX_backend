@@ -14,8 +14,9 @@ const userSchema = mongoose.Schema(
       createdAt: {
         type: Date,
         default: Date.now,
-        expires: 60,
       },
+
+      expires: 180, // Expressed in seconds
     },
   },
   {
