@@ -2,6 +2,7 @@ const { hashSync } = require("bcrypt");
 const User = require("../Model/userModel");
 const generateToken = require("../config/generateToken");
 const asyncHandler = require("express-async-handler");
+const { compareSync } = require("bcrypt");
 
 const handleRegister = async (req, res) => {
   const { username, password, confirPassword } = req.body;
@@ -23,7 +24,7 @@ const handleRegister = async (req, res) => {
       });
 
       user.save();
-      console.log(user);
+
       res.status(201).json({
         success: true,
         user: user,
@@ -112,7 +113,7 @@ const handledeleteUser = async (req, res) => {
   const { username } = req.params;
   try {
     const deleteUser = await User.findOneAndDelete({ username: username });
-    console.log(deleteUser, "deleteuser");
+
     if (!deleteUser) {
       return res.status(404).send("User not found");
     }
@@ -126,12 +127,17 @@ const handledeleteUser = async (req, res) => {
 const handleChangeEmail = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  const newEmail = req.body.username;
+  const { username, confirmUsername } = req.body;
+
+  if (username !== confirmUsername) {
+    res.status(404);
+    throw new Error("email is mismatched");
+  }
 
   try {
     const user = await User.findByIdAndUpdate(
       userId,
-      { username: newEmail },
+      { username: username },
       { new: true }
     );
 
@@ -139,8 +145,41 @@ const handleChangeEmail = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     const email = user.username;
-    console.log("Updated user:", email);
+
     res.status(200).json({ message: "Email updated successfully", email });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+const handleChangePassword = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const userId = req.user._id;
+
+  const { currentPassword, newPassword, confirnewPassword } = req.body;
+
+  if (!compareSync(currentPassword, user.password)) {
+    res.status(404);
+    throw new Error("current password is mismatched");
+  }
+
+  if (newPassword !== confirnewPassword) {
+    res.status(404);
+    throw new Error("newPassword is mismatched");
+  }
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { password: hashSync(newPassword, 12) },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "password updated successfully" });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -161,4 +200,5 @@ module.exports = {
   handlePrivacy,
   allUsers,
   handleChangeEmail,
+  handleChangePassword,
 };
