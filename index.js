@@ -9,6 +9,7 @@ const otpRouter = require("./Routes/otpRoutes");
 const customizeRouter = require("./Routes/customizeRouter");
 const chatRouter = require("./Routes/chatRouter");
 const messageRouter = require("./Routes/messageRouter");
+const supportRouter = require("./Routes/supportRouter");
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
@@ -40,6 +41,7 @@ app.use(otpRouter);
 app.use("/api/chat", chatRouter);
 app.use("/customize", customizeRouter);
 app.use("/message", messageRouter);
+app.use("/support", supportRouter);
 const DB = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.6oxpbun.mongodb.net/SparkNEX?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose

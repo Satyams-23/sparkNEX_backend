@@ -24,10 +24,10 @@ const handleRegister = async (req, res) => {
       });
 
       user.save();
-
+      const { password: _, ...userWithoutPassword } = user._doc;
       res.status(201).json({
         success: true,
-        user: user,
+        user: userWithoutPassword,
         message: "user sucessfull create",
         Token: generateToken(user._id),
       });

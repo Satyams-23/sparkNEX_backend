@@ -9,6 +9,10 @@ const userSchema = mongoose.Schema(
     gender: String,
     phone: String,
     botName: String,
+    role: {
+      type: String,
+      default: "user",
+    },
     otp: {
       type: Number,
       createdAt: {
