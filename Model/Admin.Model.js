@@ -18,14 +18,16 @@ const adminSchema = mongoose.Schema(
             type: String,
             default: 'admin',
         },
-        isVerified: {
-            type: Boolean,
-            default: false,
-        },
+
     }, {
     timestamps: true,
 }
 );
+
+// match the password entered by the user with the password in the database without bcrypt
+adminSchema.methods.matchPassword = async function (enteredPassword) {
+    return enteredPassword === this.password;
+};
 
 const Admin = mongoose.model('Admin', adminSchema);
 
