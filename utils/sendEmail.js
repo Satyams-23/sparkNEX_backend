@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const path = require('path');
 
-const generateOTP = require('./generateOTP');
 
 dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config();
