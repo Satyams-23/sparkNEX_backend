@@ -1,5 +1,5 @@
-const Customize = require("../Model/customizeModel");
-const User = require("../Model/userModel");
+const Customize = require("../../Model/customizeModel");
+const User = require("../../Model/userModel");
 
 const customizeSparkBot = async (req, res) => {
   try {

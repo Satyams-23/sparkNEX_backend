@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Support = require("../Model/supportModel");
+const Support = require("../../Model/supportModel");
 
 const handleAssistance = asyncHandler(async (req, res) => {
   try {

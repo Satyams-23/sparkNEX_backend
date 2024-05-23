@@ -11,7 +11,7 @@ const {
   allUsers,
   handleChangeEmail,
   handleChangePassword,
-} = require("../Controller/userController.js");
+} = require("../Controller/User/userController");
 const passport = require("passport");
 require("../config/passport.js");
 const router = express.Router();

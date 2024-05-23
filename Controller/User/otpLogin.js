@@ -1,6 +1,6 @@
-const sendOtp = require("../config/sendOtp");
-const User = require("../Model/userModel");
-const generateOTP = require("../config/generateOTP");
+const sendOtp = require("../../config/sendOtp");
+const User = require("../../Model/userModel");
+const generateOTP = require("../../config/generateOTP");
 
 const createOTPuser = async (req, res) => {
   try {
