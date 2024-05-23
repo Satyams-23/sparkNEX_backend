@@ -57,32 +57,38 @@ const register = asyncHandler(async (req, res) => {
 )
 
 const login = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = await Admin.findOne({ email });
+        const user = await Admin.findOne({ email });
 
-    if (!user) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+        if (!user) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+        }
+
+        const isMatch = await user.matchPassword(password);
+
+        if (!isMatch) {
+            throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
+        }
+
+        const token = generatetoken(user._id);
+
+        user.isVerified = true;
+        await user.save();
+
+        res.status(200).json(new ApiResponse(200, {
+            user,
+            token
+        }, 'User login successfully'
+        ))
+
+
+    } catch (error) {
+        throw new ApiError(httpStatus.BAD_REQUEST, error.message)
+
+
     }
-
-    const isMatch = await user.matchPassword(password);
-
-    if (!isMatch) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
-    }
-
-    const token = generatetoken(user._id);
-
-    user.isVerified = true;
-    await user.save();
-
-    res.status(200).json(new ApiResponse(200, {
-        user,
-        token
-    }, 'User login successfully'
-    ))
-
-
 
 })
 
