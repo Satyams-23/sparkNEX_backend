@@ -5,7 +5,7 @@ const {
   customizeResponse,
   customizePersonality,
   customizeGet,
-} = require("../Controller/customizeController");
+} = require("../Controller/User/customizeController");
 
 router.post("/sparkbot/:username", customizeSparkBot);
 router.put("/response/:botName", customizeResponse);
