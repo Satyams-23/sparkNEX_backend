@@ -12,7 +12,7 @@ const register = asyncHandler(async (req, res) => {
     try {
         const { email } = req.body;
 
-        const userExists = await Admin.findOne({ email });
+        const userExists = await Admin.findOne({ email, });
         if (userExists) {
             throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
         }
@@ -32,6 +32,7 @@ const register = asyncHandler(async (req, res) => {
             email,
             password,
             role: 'admin',
+            isVerified: false,
 
         })
 
@@ -71,6 +72,9 @@ const login = asyncHandler(async (req, res) => {
     }
 
     const token = generatetoken(user._id);
+
+    user.isVerified = true;
+    await user.save();
 
     res.status(200).json(new ApiResponse(200, {
         user,
