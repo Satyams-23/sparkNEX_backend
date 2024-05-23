@@ -5,7 +5,7 @@ const ApiResponse = require('../../utils/ApiResponse')
 const asyncHandler = require('../../utils/asyncHandler')
 const sendEmail = require('../../utils/sendEmail')
 const Admin = require('../../Model/Admin.Model')
-const token = require('../../config/generateToken')
+const generatetoken = require('../../config/generateToken')
 
 
 const register = asyncHandler(async (req, res) => {
@@ -39,7 +39,7 @@ const register = asyncHandler(async (req, res) => {
 
         const message = `Your password is ${password}`;
 
-        await sendEmail(user.email, 'Password Admin Panel', message);
+        await sendEmail(email, 'Password Admin Panel', message);
 
         res.status(201).json(new ApiResponse(201, {
             user: newUser,
@@ -70,15 +70,15 @@ const login = asyncHandler(async (req, res) => {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
     }
 
-    const token = token(user._id);
+    const token = generatetoken(user._id);
 
-    res.status(200).json(200,
-        {
-            user: user,
-            token: token,
-        },
-        'User logged in'
-    );
+    res.status(200).json(new ApiResponse(200, {
+        user,
+        token
+    }, 'User login successfully'
+    ))
+
+
 
 })
 

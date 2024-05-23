@@ -24,6 +24,11 @@ const adminSchema = mongoose.Schema(
 }
 );
 
+// match the password entered by the user with the password in the database without bcrypt
+adminSchema.methods.matchPassword = async function (enteredPassword) {
+    return enteredPassword === this.password;
+};
+
 const Admin = mongoose.model('Admin', adminSchema);
 
 module.exports = Admin;
