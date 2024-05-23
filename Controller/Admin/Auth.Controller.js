@@ -9,47 +9,48 @@ const token = require('../../config/generateToken')
 
 
 const register = asyncHandler(async (req, res) => {
-    const { email } = req.body;
-
-    const userExists = await Admin.findOne({ email, isVerified: true });
-    if (userExists) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
-    }
-
-    const user = await Admin.findOne({ email, isVerified: false });
-    if (user) {
-        await user.deleteOne();
-    }
-
-    const password = generatPassword.generate({
-        length: 10,
-        numbers: true,
-    });
-
-
-    const newUser = await Admin.create({
-        email,
-        password,
-        isVerified: false,
-        role: 'admin',
-
-    })
-
-    // Send Password to email 
-
-    const message = `Your password is ${password}`;
-
     try {
-        await sendEmail({
-            email: newUser.email,
-            subject: 'SparkNexx Admin Password',
-            message,
+        const { email } = req.body;
+
+        const userExists = await Admin.findOne({ email });
+        if (userExists) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
+        }
+
+        const user = await Admin.findOne({ email });
+        if (user) {
+            await user.deleteOne();
+        }
+
+        const password = generatPassword.generate({
+            length: 10,
+            numbers: true,
         });
 
-        res.status(200).ApiResponse(200, {}, 'Email sent to user');
+
+        const newUser = await Admin.create({
+            email,
+            password,
+            role: 'admin',
+
+        })
+
+        // Send Password to email 
+
+        const message = `Your password is ${password}`;
+
+        await sendEmail(user.email, 'Password Admin Panel', message);
+
+        res.status(201).json(new ApiResponse(201, {
+            user: newUser,
+        },
+            'User created successfully'
+        ))
+
+
+
     } catch (error) {
-        res.status(500);
-        throw new ApiError(500, 'Email could not be sent');
+        throw new ApiError(httpStatus.BAD_REQUEST, error.message)
     }
 }
 )
@@ -57,7 +58,7 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await Admin.findOne({ email, isVerified: true });
+    const user = await Admin.findOne({ email });
 
     if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
