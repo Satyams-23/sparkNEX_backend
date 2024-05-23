@@ -18,6 +18,10 @@ const adminSchema = mongoose.Schema(
             type: String,
             default: 'admin',
         },
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
 
     }, {
     timestamps: true,
