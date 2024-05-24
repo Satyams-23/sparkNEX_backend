@@ -10,6 +10,8 @@ const customizeRouter = require("./Routes/customizeRouter");
 const chatRouter = require("./Routes/chatRouter");
 const messageRouter = require("./Routes/messageRouter");
 const supportRouter = require("./Routes/supportRouter");
+const { deleteUnverifiedUsers } = require('./Middleware/authMiddleware');
+const AdminRouter = require("./Routes/Admin.Route");
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
@@ -35,10 +37,15 @@ app.use(
     },
   })
 );
+
+// Delete unverified users every hour
+app.use(deleteUnverifiedUsers);
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(userRouter);
 app.use(otpRouter);
+app.use("/admin", AdminRouter);
 app.use("/api/chat", chatRouter);
 app.use("/customize", customizeRouter);
 app.use("/message", messageRouter);

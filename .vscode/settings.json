@@ -68,5 +68,8 @@
   },
   "accessibility.signals.voiceRecordingStopped": {
     "sound": "off"
-  }
+  },
+  "cSpell.words": [
+    "generatetoken"
+  ]
 }
